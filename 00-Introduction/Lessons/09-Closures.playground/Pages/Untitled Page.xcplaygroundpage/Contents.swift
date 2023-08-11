@@ -108,3 +108,138 @@ print(captainFirstTeam)
  1. We are still calling the sorted() function on team, but instead of passing in a standalone predefined function, we are passing in a closure (the contents between the two curly braces).
  2. Inside the closure (name1: String, name2: String) -> Bool in is where we list the data going in and coming out
  3. Everything after 'in' is just a normal function! */
+
+// ============ 2. Trailing closures and shorthand syntax =============
+
+/* Let's take a look at the previous problem:
+ let team = ["Gloria", "Suzanne", "Piper", "Tiffany", "Tasha"]
+ let captainFirstTeam = team.sorted(by: { (name1: String, name2: String) -> Bool in
+     if name1 == "Suzanne" {
+         return true
+     } else if name2 == "Suzanne" {
+         return false
+     }
+     return name1 < name2
+ })
+
+ print(captainFirstTeam)
+ 
+ Remember, to pass a function into the sorted() function, we must take in 2 of the same data type (Strings in this case) and return a bool. So why do we have to specify in our function that we're taking in two Strings and returning a bool if the sorted() function will only accept it this way anyways? Turns out, we don't!
+ 
+ Instead we can write the following: */
+
+let captainFirstTeamV2 = team.sorted(by: { name1, name2 in
+    if name1 == "Suzanne" {
+        return true
+    } else if name2 == "Suzanne" {
+        return false
+    }
+    return name1 < name2
+})
+
+print(captainFirstTeamV2)
+
+// This has already reduced the clutter in our code, but we can go one step further: when one function (in this case sorted()) accepts another function as a parameter, Swift gives us a special syntax type called trailing closure syntax. This means the chunk of code including 'by: ...' and the closing parentheses can be left out.
+
+// Rather than passing in the sorting function as a parameter, we just go ahead and start the closure directly.
+
+let captainFirstTeamV3 = team.sorted { name1, name2 in // The 'in' keyword divides the body of the closure from the parameters in the return type.
+    if name1 == "Suzanne" {
+        return true
+    } else if name2 == "Suzanne" {
+        return false
+    }
+    return name1 < name2
+}
+
+print(captainFirstTeamV3)
+
+// Swift can automatically provide parameter names using shorthand syntax. We no longer have to define name1 and name2 or include the 'in' keyword. This syntax is less cluttered, however it may be a bit more confusing in this particular case as $0 and $1 aren't the most descriptive names.
+
+let captainFirstTeamV4 = team.sorted {
+    if $0 == "Suzanne" {
+        return true
+    } else if $1 == "Suzanne" {
+        return false
+    }
+    return $0 < $1
+}
+
+print(captainFirstTeamV4)
+
+// This method may work better in a situation like a reverse sort, where we make the sorted() function reverse the array like so:
+
+let reverseTeam = team.sorted {
+    return $0 > $1 // "Put left before right instead of left after right"
+}
+
+print(reverseTeam)
+
+// Now that we're down to a single line of code in the body of the closure, we can actually remove the 'return' keyword and make everything just one line of code!
+
+let reverseTeamV2 = team.sorted { $0 > $1 }
+print(reverseTeamV2)
+
+// There are no fixed rules on whether or not to use shorthand syntax. It's recommended to use it in most cases except for the following three situations:
+// 1. If the closure's body is long. Just declare the variable names.
+// 2. If the automatic variable names ($0, $1, etc.) are used more than once. It can get confusing.
+// 3. If you end up with 3 or more parameters, it becomes too complex to keep track of. It's much easier to just name them yourself.
+
+// Let's use the filter() function to find all of the team players whose names begin with "T"
+let tOnly = team.filter { $0.hasPrefix("T")}
+print(tOnly)
+
+// The map() function lets us transform every item in the array in a manner of our choosing. Note that when working with map(), you don't have to return the same type that you received. For example, you can return a list of integers from a list of strings.
+
+let uppercasedTeam = team.map { $0.uppercased() }
+print(uppercasedTeam)
+
+// ============ 3. Accepting functions as parameters =============
+
+// Wrting a function that generates an array of integers by calling another function repeatedly.
+
+// This function takes in two parameters: size (int) and a generator() function. The generator function accepts no parameters and returns an integer
+func makeArray(size: Int, using generator: () -> Int) -> [Int] {
+    var numbers = [Int]() // create an empty integer array.
+    for _ in 0..<size {
+        let newNumber =  generator() // call generator() function, put integer in array
+        numbers.append(newNumber)
+    }
+    return numbers
+}
+
+// New closure implementing makeArray function.
+let rolls = makeArray(size: 50) {
+    Int.random(in: 1...20)
+}
+
+print(rolls)
+
+// New generate number function
+func generateNumber() -> Int {
+    Int.random(in: 1...20)
+}
+
+// Revised newRolls closure implements makeArray() and generateNumber()
+let newRolls = makeArray(size: 50, using: generateNumber)
+print(newRolls)
+
+// Making a function that accepts three function parameters.
+func doImportantWork(first: () -> Void, second: () -> Void, third: () -> Void) {
+    print("About to start first work")
+    first()
+    print("About to start second work")
+    second()
+    print("About to start third work")
+    third()
+    print("Done!")
+}
+
+// Calling the function
+doImportantWork { // first trailing closure
+    print("This is the first work")
+} second: { // second trailing closure
+    print("This is the second work")
+} third: { // third trailing closure
+    print("This is the third work")
+}
