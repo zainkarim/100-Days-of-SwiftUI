@@ -26,7 +26,7 @@ func squareRoot(of number: Int) throws -> Int {
     return root
 }
 
-let number = 9
+let number = 900
 
 do {
     let root = try squareRoot(of: number)
