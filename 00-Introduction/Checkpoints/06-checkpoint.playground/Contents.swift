@@ -18,6 +18,20 @@ struct Car {
     let numberOfSeats: Int
     private(set) var currentGear = 1 // Let's make first gear the default value.
     
+    // One function to change gears up or down.
+    mutating func gearShift(newGear: Int) -> Bool {
+        var oldGear: Int = 0
+        if newGear >= 1 && newGear < 10 {
+            oldGear = currentGear
+            currentGear = newGear
+            print("Shifting from \(oldGear) to gear \(currentGear).")
+            return true
+        } else {
+            print("Invalid shift: that gear does not exist!")
+            return false
+        }
+    }
+    /* two seperate functions for upshifting and downshifting/
     mutating func upShift(shifts: Int) -> Bool {
         if currentGear >= 1 && currentGear + shifts < 10 {
             currentGear += shifts
@@ -38,7 +52,7 @@ struct Car {
             print("Can't shift that low!")
             return false
         }
-    }
+    } */
 }
 
 var accord = Car(model: "Honda Accord", numberOfSeats: 5)
@@ -46,7 +60,10 @@ print("Model: \(accord.model)")
 print("Number of seats: \(accord.numberOfSeats)")
 print("Current gear: \(accord.currentGear)")
 
-accord.upShift(shifts: 6)
-accord.downShift(shifts: 5)
-accord.downShift(shifts: 1)
-accord.downShift(shifts: 1)
+/* accord.upShift(shifts: 6)
+ accord.downShift(shifts: 5)
+ accord.downShift(shifts: 1)
+ accord.downShift(shifts: 1) */
+
+accord.gearShift(newGear: 6)
+accord.gearShift(newGear: 12)
