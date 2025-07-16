@@ -38,7 +38,7 @@ if ourName < friendName {
     print("It's \(friendName) vs \(ourName)!")
 }
 
-// Challenge: If adding an item to an array results in the array containing more thab three items, then remove the oldest one so that the array only contains the three newest items.
+// Challenge: If adding an item to an array results in the array containing more than three items, then remove the oldest one so that the array only contains the three newest items.
 
 var array = [1, 2, 3]
 print(array)

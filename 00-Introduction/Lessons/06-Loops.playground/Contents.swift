@@ -12,7 +12,7 @@ for i in 1...12 {
     print("5 times \(i) is \(5 * i)")
 }
 
-// Nested for loops
+// Nested for loops - times table
 for i in 1...12 {
     print("This is the \(i) times table.")
     for j in 1...12 {
@@ -64,10 +64,10 @@ print("Critical roll!")
 
 // Exiting loops/skipping items in a loop.
 // Continue
-let filenames = ["me.jpg", "work.txt", "micaela.jpg"]
+let filenames = ["zain-karim-resume.pdf", "work.txt", "micaela.jpeg"]
 
 for filename in filenames {
-    if filename.hasSuffix(".jpg") == false {
+    if filename.hasSuffix(".jpg") == false && filename.hasSuffix(".jpeg") == false {
         continue
     }
     print("Found picture: \(filename)")
