@@ -1,7 +1,7 @@
-import Cocoa
+// Create a constant holding any temp in C, convert to F, and then print the result in C and F
 
-let c = 23
-let f = ((c * 9)/5) + 32
+let temp_c = 24
+let temp_f = ((temp_c * 9) / 5) + 32
 
-print("Temperature in Centigrade: \(c)°\n" +
-      "Temperature in Fahrenheit: \(f)°")
+print("The temperature in Celcius is \(temp_c)°.")
+print("The temperature in Fahrenheit is \(temp_f)°.")
