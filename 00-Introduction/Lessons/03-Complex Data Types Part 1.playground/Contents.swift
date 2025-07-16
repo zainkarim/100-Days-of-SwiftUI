@@ -65,7 +65,8 @@ let hasGraduated = [
 let olympics = [
     2012: "London",
     2016: "Rio de Janeiro",
-    2021: "Tokyo"
+    2021: "Tokyo",
+    2024: "Paris"
 ]
 
 print(olympics[2012, default: "Unknown"])
@@ -92,7 +93,7 @@ let actors = Set([
 // The set will automatically remove any duplicate values and it will not remember the exact order that was used in the array.
 print(actors)
 
-// Inserting items into a set. ** Items cannot be appended to a set because there's no  order in a set
+// Inserting items into a set. ** Items cannot be appended to a set because there's no order in a set
 var cars = Set<String>()
 cars.insert("Porsche 911")
 cars.insert("Lexus LX470")
