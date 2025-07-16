@@ -87,11 +87,11 @@ func pythag(a: Double, b: Double) -> Double {
 print(pythag(a: 3, b: 4))
 
 // This can also be boiled down to one line of code:
-func pythagorean(a: Double, b: Double) -> Double {
+func pythagorean(_ a: Double, _ b: Double) -> Double {
     sqrt((a * a) + (b * b))
 }
 
-print(pythagorean(a: 3, b: 4))
+print(pythagorean(3, 4))
 
 // If your function does not return a value, you can still use return by itself to force the function to exit immediately.
 
@@ -152,6 +152,16 @@ print("Name: \(firstName) \(lastName)")
 
  let (firstName, _) = getUser4()
  print("Name: \(firstName)") */
+
+func quadraticEquation(_ a: Double, _ b: Double, _ c: Double) -> (x1: Double, x2: Double) {
+    
+    let x1 = ((-b) + sqrt((b*b) - (4 * a * c))) / (2 * a)
+    let x2 = ((-b) - sqrt((b*b) - (4 * a * c))) / (2 * a)
+    
+    return (x1, x2)
+}
+
+print(quadraticEquation(1, 1, -20))
 
 // ================ 4. Customizing parameter labels =================
 
