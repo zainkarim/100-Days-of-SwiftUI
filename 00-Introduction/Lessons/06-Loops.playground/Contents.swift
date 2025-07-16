@@ -64,11 +64,11 @@ print("Critical roll!")
 
 // Exiting loops/skipping items in a loop.
 // Continue
-let filenames = ["zain-karim-resume.pdf", "work.txt", "micaela.jpeg"]
+let filenames = ["zain-karim-resume.pdf", "me.jpg", "work.txt", "micaela.jpeg"]
 
 for filename in filenames {
     if filename.hasSuffix(".jpg") == false && filename.hasSuffix(".jpeg") == false {
-        continue
+        continue // Skips .pdf and .txt
     }
     print("Found picture: \(filename)")
 }
