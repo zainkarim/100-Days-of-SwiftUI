@@ -45,7 +45,8 @@ printTimesTableV2(for: 5, end: 10)
 
 // Step 1:
 enum PasswordError: Error {
-    case short, obvious
+    case short
+    case obvious
 }
 
 // Step 2:
@@ -72,12 +73,12 @@ func checkPassword(_ password: String) throws -> String {
 let string = "12345"
 
 do {
-    let result = try checkPassword(string) // 'try' must be written before all throwing functions as a signal that regular code execution might stop here.
-    print("Password rating: \(result)")
-} catch PasswordError.short {  // We can also create custom messages for particular types of errors.
-    print("Invalid password: Please use a password longer than 5 characters.")
+    let result = try checkPassword(string) // 'try' must be written before all thrwoing functions to signal that regular code execution might stop here
+    print("Password rating is \(result).")
+} catch PasswordError.short { // 'catch' block should handle every kind of error
+    print("Please use a longer password.")
 } catch PasswordError.obvious {
-    print("Invalid password: I have the same combination on my luggage!")
-} catch { // Catch all. Apple provides us with meaningful errors and allows us to use the 'error' constant to print it.
-    print("There was an error: \(error.localizedDescription)")
+    print("Too obvious! Please try again.")
+} catch { // catch all
+    print("There was an error.")
 }
