@@ -6,35 +6,30 @@ You can’t use Swift’s built-in sqrt() function or similar – you need to fi
  You should only consider integer square roots – don’t worry about the square root of 3 being 1.732, for example.
  If you can’t find the square root, throw a “no root” error. */
 
-enum squareRootError: Error {
-    case outOfBounds, noRoot
+enum SquareRootError: Error {
+    case outOfBounds
+    case noRoot
 }
 
-func squareRoot(of number: Int) throws -> Int {
-    var root = 0
-    if number <= 0 || number > 10_000 {
-        throw squareRootError.outOfBounds
+func squareRoot(_ num: Int) throws -> Int {
+    if num < 1 || num > 10_000{
+        throw SquareRootError.outOfBounds
     }
-    for i in 1...100 {
-        if i * i == number {
-            root = i
+    for i in 1...100 { // Highest number we can check is 10_000 (sqrt = 100)
+        if i * i == num {
+            return i
         }
     }
-    if root == 0 {
-        throw squareRootError.noRoot
-    }
-    return root
+    throw SquareRootError.noRoot
 }
 
-let number = 900
+let num = 999
 
 do {
-    let root = try squareRoot(of: number)
-    print("The square root of \(number) is \(root).")
-} catch squareRootError.outOfBounds {
-    print("Error: the number you entered is out of bounds. Please enter a number between 1 and 10,000.")
-} catch squareRootError.noRoot {
-    print("Error: The number you entered does not have an integer square root.")
-} catch {
-    print("Something went wrong: \(error.localizedDescription)")
+    let result = try squareRoot(num)
+    print("The square root of \(num) is \(result).")
+} catch SquareRootError.outOfBounds {
+    print("\(num) is out of bounds. Choose a different number.")
+} catch SquareRootError.noRoot {
+    print("\(num) does not have an integer square root. Choose a different number.")
 }
