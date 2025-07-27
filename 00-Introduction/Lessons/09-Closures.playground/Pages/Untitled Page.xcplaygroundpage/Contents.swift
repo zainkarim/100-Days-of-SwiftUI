@@ -72,7 +72,7 @@ let team = ["Gloria", "Suzanne", "Piper", "Tiffany", "Tasha"]
 let sortedTeam = team.sorted()
 print(sortedTeam)
 
-// the sorted() function can actually give us control over how the array is sorted by passing in a custom sorting function. This function takes in two parameters and returns 'true' if the sirst parameter comes before the second parameter.
+// the sorted() function can actually give us control over how the array is sorted by passing in a custom sorting function. This function takes in two parameters and returns 'true' if the first parameter comes before the second parameter.
 
 func captainFirstSorted(name1: String, name2: String) -> Bool {
     if name1 == "Suzanne" {
@@ -243,3 +243,15 @@ doImportantWork { // first trailing closure
 } third: { // third trailing closure
     print("This is the third work")
 }
+
+let resignation = { (name: String) in
+    print("Dear \(name), I'm outta here!")
+}
+
+func printDocument(contents: (String) -> Void) {
+    print("Connecting to printer...")
+    print("Sending document...")
+    contents("Zain")
+}
+
+printDocument(contents: resignation)
