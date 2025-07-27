@@ -21,17 +21,11 @@ import Cocoa
  33 is a lucky number
  49 is a lucky number */
 
-/* Janky solution:
-let luckyNumbers = [7, 4, 38, 21, 16, 15, 12, 33, 31, 49]
+let numbers = [7, 4, 38, 21, 16, 15, 12, 33, 31, 49]
 
-let oddNumbersOnly = luckyNumbers.filter { !$0.isMultiple(of: 2) }
-let sortedNumbers = oddNumbersOnly.sorted()
-let luckyNumberStrings: [()] = sortedNumbers.map { print("\($0) is a lucky number.")} */
-
-// Better solution
-let luckyNumbers = [7, 4, 38, 21, 16, 15, 12, 33, 31, 49]
-let formattedNumbers = luckyNumbers
-    .filter { !$0.isMultiple(of: 2) }
+let luckyNumbers: [String] = numbers
+    .filter { !$0.isMultiple(of: 2)}
     .sorted()
-    .map { print("\($0) is a lucky number.") }
+    .map { "\($0) is a lucky number"  }
 
+luckyNumbers.forEach{print($0)}
