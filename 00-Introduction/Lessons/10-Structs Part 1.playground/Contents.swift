@@ -26,16 +26,35 @@ astroworld.printSummary()
 
 // Things get more interesting when we want to have values inside our structs that can change
 
+/*
 struct Employee {
-    // The variables and constants inside of a struct are called "properties"
     let name: String
-    var vacationRemaining = 14 // Let's make 14 the default value
+    var vacationRemaining: Int
+    
+    func takeVacation(days: Int) {
+        if vacationRemaining > days {
+            vacationRemaining -= days
+            print("I'm going on vacation!")
+            print("Days remaining: \(vacationRemaining)")
+        } else {
+            print("Oops! There aren't enough days remaining.")
+        }
+    }
+}
+ 
+ */
+
+// Oops! We can't do that. takeVacation cannot change vacationRemaining. If a struct instance is constant, then its properties are constant too. We have to take an extra step to ensure that any function that wants to write data must be marked specially.
+
+struct Employee {
+    let name: String               // name and vacationRemaining are called "properties"
+    var vacationRemaining = 14     // let's make 14 the default
     
     // Swift makes us declare any function that wants to write or change data must be marked as mutating.
     // Functions inside structs are called "methods"
     mutating func takeVacation(days: Int) {
         if vacationRemaining > days {
-            vacationRemaining -= days // If we forget to make the function a mutating function, then we will encounter an error! Without adding the 'mutating' keyword, the takeVacation() function CANNOT change the vacationRemaining variable. This is because we made it a constant. Swift makes the Employee and all of the data inside of it constant as well. A structs instants and properties are constants.
+            vacationRemaining -= days // If we forget to make the function a mutating function, then we will encounter an error! Without adding the 'mutating' keyword, the takeVacation() function CANNOT change the vacationRemaining variable. This is because we made it a constant. Swift makes the Employee and all of the data inside of it constant as well. A structs instances and properties are constants.
             
             print("I'm going on vacation!")
             print("\(vacationRemaining) vacation days remaining.")
@@ -45,9 +64,9 @@ struct Employee {
     }
 }
 
-// If we decide to make this variable a constant using the 'let' keyword, we will encounter a problem. We cannot call takeVacation (a mutating function) on a constant.
 // Constants and variables created from structs are called "Instances". The code after the = sign is called the "initializer"
-var archer = Employee(name: "Sterling Archer")
+var archer = Employee(name: "Sterling Archer", vacationRemaining: 14)
+// What if we made made `archer` a constant with `let` instead of a var? Turns out, we can't call mutating functions on constants -- only variables!
 archer.takeVacation(days: 5)
 print(archer.vacationRemaining)
 
@@ -68,27 +87,38 @@ struct EmployeeV2 {
     
     // Computed property:
     var vacationRemaining: Int { // Computed properties must always have explicit types.
-        // We still need to be able to write to vacationRemaining. To do so we need some getters and setters. In our case, we already have our  getter in out computed property.
-        
+        vacationAllocated - vacationTaken
+    }
+}
+
+var archer2 = EmployeeV2(name: "Sterling Archer", vacationAllocated: 14)
+archer2.vacationTaken += 4
+print(archer2.vacationRemaining)
+archer2.vacationTaken += 4 // This is computed dynamically, not stored!
+print(archer2.vacationRemaining)
+
+// In it's current state, we can't write to this struct. For example, we're not able to say archer2.vacationRemaining = 60. To do so, we have to provide getters (code that reads) and setters (code that writes).
+
+struct EmployeeV3 {
+    let name: String
+    var vacationAllocated = 14
+    var vacationTaken = 0
+    
+    // Computed property:
+    var vacationRemaining: Int {
         get {
             vacationAllocated - vacationTaken
         }
-        
         set {
             vacationAllocated = vacationTaken + newValue // newValue is automatically provided to us inside of the setter by Swift.
         }
     }
 }
 
-var bucky = EmployeeV2(name: "Bucky", vacationAllocated: 14)
-bucky.vacationTaken += 4
-print(bucky.vacationRemaining)
-bucky.vacationTaken += 4
-print(bucky.vacationRemaining)
-
 // Now that we've added our getter and setters, we can modify vacationRemaining.
-bucky.vacationRemaining = 20
-print(bucky.vacationRemaining)
+var bucky = EmployeeV3(name: "Bucky")
+bucky.vacationTaken += 4 // 10 days remaining
+bucky.vacationRemaining = 5
 print(bucky.vacationAllocated)
 
 // 3. ============= Creating property observers =====================
@@ -108,7 +138,7 @@ game.score -= 3
 print("Score is now \(game.score)")
 game.score += 1
 
-// The above code compiles and runs, but there's an error. We added 1 to the score at the very end, but we didn't write a print statement to print that score to the terminal. We can just add the print statement after, but it would be better to use property observers to just print the score whenever it changes by attaching the print call directly to a didSet observer on the score. Let's rewrite this code:
+// The above code compiles and runs, but there's a bug. We added 1 to the score at the very end, but we didn't write a print statement to print that score to the terminal. We can just add the print statement after, but it would be better to use property observers to just print the score whenever it changes by attaching the print call directly to a didSet observer on the score. Let's rewrite this code:
 
 struct Game2 {
     var score = 0 {
@@ -165,7 +195,7 @@ struct Player2 {
     let number: Int
     
     // 1. Note that there is no func keyword, it is not a function.
-    init(name:String, number: Int) { // 2. Even though we're creating a new player instance, init doesn't return anything. There is no explicit return type here.
+    init(name: String, number: Int) { // 2. Even though we're creating a new player instance, init doesn't return anything. There is no explicit return type here.
         // 3. We're using 'self' to assign values, meaning we assign the name parameter to self's name property. Without self, we'd have name = name, which can be confusing.
         self.name = name
         self.number = number
@@ -190,3 +220,17 @@ print(player3.number)
 // Although you can call other methods inside your initializer, you can only do so once you have sattisfied the golden rule.
 // You can also assign multiple initializers assigned to your struct as long as they follow the golden rule.
 // As soon as you have your own custom initializer, you will lose access to Swift's automatically generated memberwise initializer unless you take custom steps to retain it. This is done on purpose. 
+
+struct Language {
+    var nameEnglish: String
+    var nameLocal: String
+    var speakerCount: Int
+    
+    init(english: String, local: String, speakerCount: Int) {
+        self.nameEnglish = english
+        self.nameLocal = local
+        self.speakerCount = speakerCount
+    }
+}
+
+let french = Language(english: "French", local: "Francais", speakerCount: 220_000_000)
