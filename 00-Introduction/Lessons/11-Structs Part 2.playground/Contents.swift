@@ -58,7 +58,7 @@ struct BankAccountV2 {
  3. public: Anyone anywhere can use this
  4. private(set): Anyone can read the property, but it can only be written/modified by internal methods. */
 // Access control is about limiting what you and other devs can do.
-// Important tip ⭐️ : if you have a private access control property in your struct, there's a good chance you have to create your own initializer.
+// Important tip ⭐️ : if you have a private acceZss control property in your struct, there's a good chance you have to create your own initializer.
 
 // 2. =============== Static properties and methods ====================
 
