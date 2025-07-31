@@ -160,19 +160,109 @@ print(user4.username) // Taylor
 
 // If you want to make a unique copy of a class instance, sometimes called a "deep copy," you'll be able to handle creating a new instance and copying across properties by hand.
 
-class UserV2 {
-    var usernameV2 = "Anonymous"
+class Person {
+    var name = "Anonymous"
     
-    func copy() -> UserV2 {
-        let userV2 = UserV2()
-        userV2.usernameV2 = usernameV2
-        return userV2
+    func copy() -> Person {
+        let person = Person()
+        person.name = name
+        return person
     }
 }
 
-var user5 = UserV2()
+var user5 = Person()
 var user6 = user5.copy() // Now we can call copy whenever we want a unique copy. This will leave user3 alone when we change user4
-user6.usernameV2 = "Taylor"
+user6.name = "Taylor"
 
-print(user5.usernameV2) // Anonymous
-print(user6.usernameV2) // Taylor
+print(user5.name) // Anonymous
+print(user6.name) // Taylor
+
+class Statue {
+    var sculptor = "Unknown"
+}
+var venusDeMilo = Statue()
+venusDeMilo.sculptor = "Alexandros of Antioch"
+var david = Statue()
+david.sculptor = "Michaelangelo"
+print(venusDeMilo.sculptor)
+print(david.sculptor)
+
+// 4. ===================== Creating a deinitializer for a class =========================
+
+// Swift’s classes can optionally be given a deinitializer, which is a bit like the opposite of an initializer in that it gets called when the object is destroyed rather than when it’s created.
+
+/*  1. You don’t use func with deinitializers.
+ 2. Deinitializers can never take parameters or return data (no parentheses).
+ 3. Deinitalizers run when the last copy of a class instance is destroyed.
+ 4. We never call deinitializers directly.
+ 5. Structs do not have deinitializers (you can't copy them!) */
+
+// When a deinitializer is called comes down to scope. In the case of classes, only one copy of the data is destroyed when we exit scope. However, when all copies have been destroyed, then the underlying data is also destroyed.
+
+class User2 {
+    let id: Int
+    
+    init(id: Int) {
+        self.id = id
+        print("User \(id): I'm alive!")
+    }
+    
+    deinit { // No parentheses!! Cannot take paramaters
+        print("User \(id): I'm dead!")
+    }
+}
+
+// For example, if we create a user in this loop, it'll be destroyed when the iteration ends.
+
+var users = [User2]()
+
+for i in 1...3 {
+    let user = User2(id: i)
+    print("User \(user.id): I'm in control.")
+    users.append(user)
+}
+
+print("Loop is finished!")
+users.removeAll() // All objects in the users array are destroyed, so deinit is called.
+print("Array is clear!")
+
+// 5. ===================== Working with variables inside classes =========================
+
+// Classes work like sign posts. Every copy of a Class instance is actually a sign pointing to the same piece of underlying data. This matters because changing one copy  changes the other copies, but it also affects the way we handle variables stored inside Classes.
+
+class User3 {
+    var name = "Paul" // The name property is a var, so it CAN be changed.
+}
+
+let user7 = User3()
+user7.name = "Taylor"
+print(user7.name)
+
+// But, we're changing the constant??
+// Turns out, we aren't. The class instant itself cannot be changed.
+
+// What if we make the class property and the name both variables?
+
+class User4 {
+    var name = "Paul"
+}
+
+var user8 = User4()
+user8.name = "Taylor"
+user8 = User4() // Here, we change the actual instance of user8 (a whole new User4())
+print(user8.name) // Paul
+
+// If we have variable instance and constant properties, this means we can make a new instance of User() if we want, but when that's done, we can't change the internal values.
+
+/* We end up with four possible situations:
+ 1. Constant class, constant property:
+    Sign that always points to the same user, who always has the same name
+ 2. Constant class, variable property
+    Sign that always points to the same user, but they CAN change their name
+ 3. Variable class, variable property
+    Sign can move around and point to different people, but their names can never change
+ 4. Variable class, constant property
+    Sign can move around and point to different people, and the people CAN change their names.*/
+
+// Because classes refer to data in a shared bucket, they do not need to have the `mutating` keyword with methods that change their data.
+
