@@ -42,7 +42,7 @@ class Employee {
         self.hours = hours
     }
     
-    func printSummary() {
+    func printSummary() { // This method can also be inherited by the subclasses
         print("I work \(hours) hours a day.")
     }
 }
@@ -53,7 +53,7 @@ class Developer: Employee {
         print("I'm writing code for \(hours) hours today.")
     }
     
-    override func printSummary() {
+    override func printSummary() {   // Custom printSummary() for Developer child class
         print("I'm a developer who will sometimes work \(hours) hours a day, but other times I will spend \(hours) hours arguing about whether code should be indented with spaces or tabs.")
     }
 }
@@ -87,7 +87,7 @@ novall.printSummary()
 
 // 3. ============= Adding initializers for classes ==============
 
-// Class initizliers are a lot more complicated than struct initializers, but with a little cherrypicking we can focus on the part that really matters: if a child class has any custom initializers, it must always call the parent's initializers when it's finished setting up its own properties (if it has any).
+// Class initialiers are a lot more complicated than struct initializers, but with a little cherrypicking we can focus on the part that really matters: if a child class has any custom initializers, it must always call the parent's initializers when it's finished setting up its own properties (if it has any).
 // Swift doesn't automatically generate a memberwise initializer for classes. This applies with or without inheritance happening. We either need to write our own initializer, or provide default values for all the properties of the class.
 
 class Vehicle {
@@ -104,7 +104,7 @@ class Vehicle {
 class Car: Vehicle {
     let isConvertible: Bool
     
-    init(isConvertible: Bool, isElectric: Bool) {
+    init(isConvertible: Bool, isElectric: Bool) { // notice that Car's init includes properties from Vehicle
         self.isConvertible = isConvertible
         super.init(isElectric: isElectric)
         // 'super' allows us to call up to methods inherited from a parent class such as, in this case, its initializer. You can use it with other methods as well; this is not restricted to initializers.
@@ -142,9 +142,21 @@ user2.username = "Taylor"
 print(user1.username)
 print(user2.username)
 
-// This is a rally important feature as it allows us to share common data in lots of parts of our program. SwiftUI relies heavily on this.
+// This is a really important feature as it allows us to share common data in lots of parts of our program. SwiftUI relies heavily on this.
 
 // In comparison, structs do not share their data across their copies.
+
+struct Username {
+    var username = "Anonymous" // This property will be shared across all instances of the User class.
+}
+
+var user3 = Username()
+var user4 = user3
+user4.username = "Taylor"
+
+print(user3.username) // Anonymous
+print(user4.username) // Taylor
+
 
 // If you want to make a unique copy of a class instance, sometimes called a "deep copy," you'll be able to handle creating a new instance and copying across properties by hand.
 
@@ -158,9 +170,9 @@ class UserV2 {
     }
 }
 
-var user3 = UserV2()
-var user4 = user3.copy() // Now we can call copy whenever we want a unique copy. This will leave user3 alone when we change user4
-user4.usernameV2 = "Taylor"
+var user5 = UserV2()
+var user6 = user5.copy() // Now we can call copy whenever we want a unique copy. This will leave user3 alone when we change user4
+user6.usernameV2 = "Taylor"
 
-print(user3.usernameV2)
-print(user4.usernameV2)
+print(user5.usernameV2) // Anonymous
+print(user6.usernameV2) // Taylor
